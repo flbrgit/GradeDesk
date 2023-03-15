@@ -86,8 +86,17 @@ class Base{
     update_grades(){
         let table = document.createElement("table");
         this.retrieve_information();
+        table.style.fontFamily = 'AntonZora';
+        table.style.borderCollapse = "collapse";
+        table.style.border = "5px double rgb(0,200,0)";
+        table.style.borderRadius = "5px";
+        table.style.color = "black";
+        table.style.visibility = "visible";
+        table.id = "table2";
         let row = table.insertRow();
         let cell = row.insertCell();
+        cell.innerHTML = "";
+        //  width=60% class="sortable table"
         for(let section of this.sections){
             let cell = row.insertCell();
             cell.innerHTML = section["name"];
@@ -99,6 +108,7 @@ class Base{
             for (let section of this.sections) {
                 let cell = row.insertCell();
             }
+            cell.class = "min";
         }
         document.getElementById("table1").appendChild(table);
         this.save_information();
