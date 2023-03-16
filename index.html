@@ -4,20 +4,22 @@
     <meta charset="UTF-8">
     <title>GradeDesk</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
     <link rel="stylesheet" href="static/css/styles.css">
     <link rel="shortcut icon" href="static/images/favicon.ico" />
     <script type="text/javascript" src="static/javascript/base.js"></script>
+    <script type="text/javascript" src="static/javascript/utils.js"></script>
     <script type="text/javascript">
         const base = new Base();
     </script>
 </head>
-<body class="body">
+<body class="body" onload="checkFileAPI();">
     <h1 align="center">GradeDesk</h1>
     <div class="container-fluid">
         <div class="row">
         <div class="col-sm-3">
             <!-- Sidebar -->
-            <div style="width:150px;height:265px;line-height:18px;padding:4px;background-color:#FCFADD;
+            <div style="width:150px;height:285px;line-height:18px;padding:4px;background-color:#FCFADD;
                   color:#714D03;border:4px double #DEBB07;text-align:center">
                 <p>Bitte wählen:</p>
                 <a href="" onclick="base.change_category('grades')" class="wrapper">
@@ -30,25 +32,27 @@
                     Punkteübersicht
                 </a><br><br>
                 <p>Aktionen</p>
-                <a href="" onclick="" class="wrapper">
-                    <div class="tooltip">Konfiguration mit Name, Noten und Arbeiten importieren</div>
-                    Import
-                </a>
-                <a href="" onclick="" class="wrapper">
-                    <div class="tooltip">Konfiguration mit allen aktuellen Namen, Noten und Arbeiten exportieren</div>
+                    <div id="container">
+                        <button style="color: #007bff;text-decoration: none;background-color: transparent; display: contents; cursor: pointer; width:120px; height:30px;" onchange='base.import_data(this)' onclick="document.getElementById('getFile').click()">
+                            Import
+                        </button>
+                        <input type='file' id="getFile" onchange="base.import_data(this)" style="display:none">
+                    </div>
+                <a href="" onclick="base.export_data()" class="wrapper">
+                    <!--<div class="tooltip">Konfiguration mit allen aktuellen Namen, Noten und Arbeiten exportieren</div>-->
                     Export
                 </a>
                 <br>
                 <br>
                 <div style="align-content: center">
                     <a href="" onclick="base.create_new_student()" class="wrapper">
-                        <div class="tooltip">Einen neuen Schüler erstellen</div>
+                        <!--<div class="tooltip">Einen neuen Schüler erstellen</div>-->
                         Schüler erstellen
                     </a>
                     <br>
                     <br>
                     <a href="" onclick="base.create_new_section()" class="wrapper">
-                        <div class="tooltip">Einen neuen Lernbereich für Noten erstellen</div>
+                        <!--<div class="tooltip">Einen neuen Lernbereich für Noten erstellen</div>-->
                         Lernbereich erstellen
                     </a>
                 </div>

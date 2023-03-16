@@ -1,0 +1,237 @@
+@font-face {
+    font-family: 'AntonZora';
+    font-style: normal;
+    font-weight: 400;
+    src: url('fonts/AntonZora.ttf') format('truetype'), local('AntonZora');
+}
+.sidebar-nav {
+    margin-top: 20px;
+    padding: 0;
+    list-style: none;
+}
+
+.body {
+    background-color: #FCFADD;
+    background-size: unset;
+    font-family: "AntonZora";
+}
+
+.wrapper {
+    cursor: help;
+    position: relative;
+    text-align: center;
+    width: 150px;
+    -webkit-transform: translateZ(0);
+    -webkit-font-smoothing: antialiased;
+}
+
+.wrapper .tooltip {
+    background: #1496bb;
+    bottom: 100%;
+    color: #fff;
+    display: block;
+    left: -20px;
+    margin-bottom: 15px;
+    opacity: 0;
+    padding: 20px;
+    pointer-events: none;
+    position: absolute;
+    width: 200px;
+    -webkit-transform: translateY(10px);
+    -moz-transform: translateY(10px);
+    -ms-transform: translateY(10px);
+    -o-transform: translateY(10px);
+    transform: translateY(10px);
+    -webkit-transition: all .25s ease-out;
+    -moz-transition: all .25s ease-out;
+    -ms-transition: all .25s ease-out;
+    -o-transition: all .25s ease-out;
+    transition: all .25s ease-out;
+    text-align: center;
+    align-content: center;
+}
+
+/* This bridges the gap so you can mouse into the tooltip without it disappearing */
+.wrapper .tooltip:before {
+    bottom: -20px;
+    content: " ";
+    display: block;
+    height: 18px;
+    left: 0;
+    position: absolute;
+    width: 100%;
+}
+
+
+.wrapper .tooltip:after {
+}
+
+.wrapper:hover .tooltip {
+    opacity: 1;
+    pointer-events: auto;
+    -webkit-transform: translateY(0px);
+    -moz-transform: translateY(0px);
+    -ms-transform: translateY(0px);
+    -o-transform: translateY(0px);
+    transform: translateY(0px);
+    width: 200px;
+}
+
+/* IE can just show/hide with no transition */
+.lte8 .wrapper .tooltip {
+    display: none;
+}
+
+.lte8 .wrapper:hover .tooltip {
+}
+
+
+/* Container holding the image and the text */
+.container {
+    position: relative;
+    text-align: left;
+    color: white;
+}
+
+.image_left {
+    position: relative;
+    text-align: left;
+    color: white;
+    background-size: 500px 500px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.image_middle {
+    position: relative;
+    text-align: center;
+    color: white;
+    background-size: 500px 500px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.image_right {
+    position: relative;
+    text-align: right;
+    color: white;
+    background-size: 500px 500px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+}
+
+table#table1 {
+    text-align:center;
+    margin-left: auto;
+    margin-right:auto;
+    width:200px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+div.container {
+    width:98%;
+    margin:1%;
+}
+
+table#table2 {
+    text-align:center;
+    margin-left: unset;
+    margin-right:auto;
+    position: absolute;
+    color: black;
+}
+
+td {
+    width: auto;
+}
+
+td.min {
+    width: 1%;
+    white-space: nowrap;
+}
+
+tr:nth-child(even) {
+    background-color: rgba(150, 212, 212, 0.4);
+}
+
+th:nth-child(even),td:nth-child(even) {
+    background-color: rgba(150, 212, 212, 0.4);
+}
+
+input#input1 {
+    text-align:center;
+    margin-left: auto;
+    margin-right:auto;
+    width:200px;
+    position: absolute;
+    top: 200%;
+    left: 5%;
+    transform: translate(30%, 30%);
+}
+.box {
+    float: left;
+    width: 32%;
+    margin-right: 2%;
+    padding: 20px;
+    background: #eee;
+    box-sizing: border-box;
+}
+.box:last-child {
+    margin-right: 0;
+}
+
+.bonbon {
+    width: 200px;
+    height: 60px;
+    background: yellow; /* old browsers */
+    background: linear-gradient(to bottom, white, yellow);
+    box-shadow: inset 0px 0px 6px #fff,inset 0px -1px 6px #fff;
+    border: 1px solid #5ea617;
+    border-radius: 1em;
+    margin: 1em;
+    align-content: center;
+    text-align: center;
+    text-align: -moz-center;
+}
+
+.bonbon.rot {
+    background: linear-gradient(to bottom, white , red);
+}
+
+.bonbon.gruen {
+    background: linear-gradient(to bottom, white , rgb(0, 255, 0));
+}
+
+.bonbon.blau {
+    background: linear-gradient(to bottom, white , rgb(0, 0, 255));
+}
+
+.bonbon.orange {
+    background: linear-gradient(to bottom, white, orange);
+}
+
+.bonbon.gelb {
+    background: linear-gradient(to bottom, white, rgb(255, 255, 0));
+}
+
+.bonbon.grau {
+    background: linear-gradient(to bottom, white, rgb(153, 153, 153));
+}
+
+.bonbon:hover,
+.bonbon:focus {
+    box-shadow:rgba(0,0,0,0.7) 0px 5px 15px, inset rgba(0,0,0,0.15) 0px -10px 20px;
+}
