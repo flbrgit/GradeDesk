@@ -17,10 +17,10 @@
     <h1 align="center">GradeDesk</h1>
     <div class="container-fluid">
         <div class="row">
-        <div class="col-sm-3">
+        <div style="width: 200px; margin-left: 20px">
             <!-- Sidebar -->
-            <div style="width:150px;height:285px;line-height:18px;padding:4px;background-color:#FCFADD;
-                  color:#714D03;border:4px double #DEBB07;text-align:center">
+            <div style="width:150px;line-height:18px;padding:4px;background-color:#FCFADD;
+                  color:#714D03;border:4px double #DEBB07;text-align:center" id="sidebar">
                 <p>Bitte wählen:</p>
                 <a href="" onclick="base.change_category('grades')" class="wrapper">
                     <div class="tooltip">Übersicht über alle Schüler mit ihren Noten</div>
@@ -33,7 +33,7 @@
                 </a><br><br>
                 <p>Aktionen</p>
                     <div id="container">
-                        <button style="color: #007bff;text-decoration: none;background-color: transparent; display: contents; cursor: pointer; width:120px; height:30px;" onchange='base.import_data(this)' onclick="document.getElementById('getFile').click()">
+                        <button style="color: #007bff;text-decoration: none;background-color: transparent; display: contents; cursor: pointer; width:120px; height:30px;" onclick="document.getElementById('getFile').click()">
                             Import
                         </button>
                         <input type='file' id="getFile" onchange="base.import_data(this)" style="display:none">
@@ -43,30 +43,38 @@
                     Export
                 </a>
                 <br>
-                <br>
-                <div style="align-content: center">
-                    <a href="" onclick="base.create_new_student()" class="wrapper">
-                        <!--<div class="tooltip">Einen neuen Schüler erstellen</div>-->
-                        Schüler erstellen
-                    </a>
-                    <br>
-                    <br>
-                    <a href="" onclick="base.create_new_section()" class="wrapper">
-                        <!--<div class="tooltip">Einen neuen Lernbereich für Noten erstellen</div>-->
-                        Lernbereich erstellen
-                    </a>
+                <div id="grades">
                 </div>
                 <br>
             </div>
         </div>
-        <div class="col-sm-8">
+        <div>
             <h3 id="section_headline" style="text-align: center" onload="base.update()"></h3>
+            <div id="form1">
+            </div>
+            <div id="form3">
+            </div>
             <div id="table1">
 
+            </div>
+            <button class="accordion">Section 1</button>
+            <div class="panel">
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            </div>
+
+            <button class="accordion">Section 2</button>
+            <div class="panel">
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            </div>
+
+            <button class="accordion">Section 3</button>
+            <div class="panel">
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
             </div>
             <script type="text/javascript">
                 base.update();
                 base.retrieve_information();
+                base.accordion_table();
             </script>
         </div>
         </div>

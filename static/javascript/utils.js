@@ -38,6 +38,7 @@ function innerText(output, object){
     output = parse_content(output);
     object.set_students(output[0]);
     object.set_sections(output[1]);
+    object.set_exams(output[2]);
 }
 
 /**

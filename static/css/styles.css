@@ -171,16 +171,30 @@ th:nth-child(even),td:nth-child(even) {
     background-color: rgba(150, 212, 212, 0.4);
 }
 
-input#input1 {
-    text-align:center;
-    margin-left: auto;
-    margin-right:auto;
-    width:200px;
-    position: absolute;
-    top: 200%;
-    left: 5%;
-    transform: translate(30%, 30%);
+form {
+    width: 30em;
+    border: 1px solid gainsboro;
+    padding: 1em 1em 0 1em;
 }
+
+input {
+    margin: 0 0 1em 1em;
+}
+
+label {
+    float: left;
+    text-align: right;
+    width: 10em;
+}
+
+label.h2 {
+    font-weight: bold;
+    font-size: 150%;
+    width: 100%;
+    margin-bottom: 1em;
+    text-align: left;
+}
+
 .box {
     float: left;
     width: 32%;
@@ -205,6 +219,44 @@ input#input1 {
     align-content: center;
     text-align: center;
     text-align: -moz-center;
+}
+
+
+.accordion {
+    background-color: #a0ff9b;
+    color: #444;
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    border: none;
+    text-align: left;
+    outline: none;
+    font-size: 15px;
+    transition: 0.4s;
+}
+
+.active, .accordion:hover {
+    background-color: #a0ff9b;
+}
+
+.accordion:after {
+    content: '\002B';
+    color: #000000;
+    font-weight: bold;
+    float: right;
+    margin-left: 5px;
+}
+
+.active:after {
+    content: "\2212";
+}
+
+.panel {
+    padding: 0 18px;
+    background-color: #a8ffe8;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.2s ease-out;
 }
 
 .bonbon.rot {
