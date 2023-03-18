@@ -226,18 +226,26 @@ class Base{
                 for (let i = 0; i < section["columns"]; i++){
                     let cell = row.insertCell();
                     cell.innerText = infos !== null && i < infos.length ? parseInt(yet_grade[infos[i]][1]) : "";
+                    if(infos !== null && infos[i] !== undefined)
+                        cell.title = infos[i];
+                    cell.style.cursor = "context-menu";
                     section_list.push(infos !== null && i < infos.length ? parseInt(yet_grade[infos[i]][1]) : "");
                 }
                 cell = row.insertCell();
                 cell.innerText = this.calculate_average(section_list);
                 cell.setAttribute("name", "section_grade");
-                cell.style.background = "#96f5aa";
+                cell.style.background = this.grade_colors[Math.round(this.calculate_average(section_list))];
                 cell_list.push(this.calculate_average(section_list));
             }
             cell = row.insertCell();
             cell.style.minWidth = "20px";
-            cell.innerText = this.calculate_average(cell_list);
-            cell.style.background = "#d5c623";
+            cell.innerText = this.calculate_average(cell_list);     //"⌀ " +
+            let color = "#44c8f8";
+            cell.style.background = "linear-gradient(to right, #44c8f8 1%, " + this.grade_colors[Math.round(this.calculate_average(cell_list))] + " 100%)";       // ;
+            if(this.calculate_average(cell_list) - Math.round(this.calculate_average(cell_list)) === -0.5) {
+                cell.style.fontWeight = "bold";
+                cell.style.fontStyle = "italic";
+            }
         }
         document.getElementById("table1").appendChild(table);
         this.save_information();
@@ -454,7 +462,6 @@ class Base{
         for(let s of base.sections){
             if(s["name"] === section && used >= s["columns"]){
                 s["columns"] += 1;
-                console.log("hello");
             }
             sections.push(s);
         }
