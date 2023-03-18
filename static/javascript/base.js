@@ -4,6 +4,14 @@ class Base{
         this.category = item != null ? item : null;
         this.all_categories = ["grades", "points"];
         this.percentages = [0.95, 0.8, 0.65, 0.5, 0.35, 0.0];
+        this.grade_colors = {
+            1: "#1ed327",
+            2: "#00ff2a",
+            3: "#dcff42",
+            4: "#f3af25",
+            5: "#ff6100",
+            6: "#ff0000",
+        }
         this.retrieve_information();
         document.onload = this.update;
     }
@@ -505,7 +513,7 @@ class Base{
             table.style.minWidth = "250px";
             table.style.textOverflow = "ellipsis";
             table.style.alignSelf = "center";
-            table.id = "table4";
+            table.id = "table5";
             let row1 = table.insertRow();
             for(let i = 0; i < 6; i++){
                 let cell = row1.insertCell();
@@ -519,29 +527,56 @@ class Base{
                 cell.innerText = Math.round(parseFloat(exam["points"] * base.percentages[i]));
                 values[i] = Math.round(parseFloat(exam["points"] * base.percentages[i]));
             }
-            let labeln = document.createElement("label");
             cell3.innerText = "Notenschlüssel: ";
             cell3.appendChild(table);
+            let cell4 = row.insertCell();
+            cell4.innerText = "Prüfung löschen";
+            /**
+             * "<img alt='error' src='/static/images/verboten.png' " +
+             *                     "width='30' " +
+             *                     "onclick='base.delete_section(\"" + section["name"] + "\")'/>";
+             */
+            let img = document.createElement("img");
+            img.alt = "delete";
+            img.src = "/static/images/verboten.png";
+            img.width = "30";
+            img.setAttribute("onclick", "base.delete_exam(this)");
+            img.setAttribute("exam_name", exam["name"]);
+            cell4.appendChild(document.createElement("br"));
+            cell4.appendChild(img);
             exam_element.appendChild(inner_table);
             main.appendChild(exam_element);
             base.create_student_table(exam, main);
-            /**
-             *
-             *             <div class="panel">
-             *                 <table style="width: 100%; align-content: center; text-align: center; background: transparent">
-             *                     <tr>
-             *                         <td>Sophia Melf</td>
-             *                         <td>
-             *                             <label for="form4" style="margin-top: 10px">Punkte:</label>
-             *                             <input id="form4" style="margin-top: 10px;width: 75px; text-align: center" type="number" value="32" onkeyup="do_something">
-             *                         </td>
-             *                         <td>Note: 3</td>
-             *                     </tr>
-             *                 </table>
-             *             </div>
-             * @type {HTMLDivElement}
-             */
         }
+    }
+
+    delete_exam(calling){
+        let exam = base.get_exam(calling.getAttribute("exam_name"));
+        let c = confirm("Prüfung '" + exam["name"] + "' wirklich löschen?");
+        if (!c)
+            return;
+        base.retrieve_information();
+        // Delete exam out of students
+        for(let student of base.students){
+            for(let section of Object.keys(student["grades"])){
+                let temp = student["grades"][section];
+                if(exam["name"] in temp){
+                    // console.log(student["grades"][section][exam["name"]]);
+                    delete student["grades"][section][exam["name"]];
+                }
+            }
+        }
+        // Delete out of exams
+        let exams = [];
+        for(let e of base.exams){
+            if(e["name"] !== exam["name"])
+                exams.push(e);
+        }
+        // exams.push(exam);
+        console.log(exams);
+        base.exams = exams;
+        base.save_information();
+        location.reload();
     }
 
     create_student_table(exam, main){
@@ -589,22 +624,99 @@ class Base{
             cell.style.width = "25%";
             cell.id = student["name"] + "_" + exam["name"];
             cell.innerText = yet_grade !== null ? "Note: " + parseInt(yet_grade[1]) : "";
+            if(yet_grade !== null){
+                cell.style.background = base.grade_colors[parseInt(yet_grade[1])];
+                // cell.style.fontSize = "18px";
+                // cell.style.textShadow = "1px 1px 1px black, 1px -1px 1px black, -1px 1px 1px black, -1px -1px 1px black";
+            }
         }
+        let row = student_table.insertRow();
+        let cell = row.insertCell();
+        cell.id = "canvas_container_cell_" + exam["name"];
+        cell.style.height = "350px";
+        let canvas = document.createElement("canvas");
+        canvas.id = "canvas_element_" + exam["name"];
+        cell.appendChild(canvas);
+        cell = row.insertCell();
+        cell.id = "canvas_stats_cell_" + exam["name"];
         panel.appendChild(student_table);
-        let a = document.createElement("div");
-        a.id = "canvas_container_" + exam["name"];
         main.appendChild(panel);
-        main.appendChild(a);
+        base.update_canvas(exam);
+        base.update_grade_statistics(exam);
+    }
+
+    update_grade_statistics(exam){
+        let cell = document.getElementById("canvas_stats_cell_" + exam["name"]);
+        removeChildren(cell);
+        let dl = document.createElement("dl");
+        dl.style.display = "table";
+        let d = base.calc_canvas_values(exam);
+        let sum = 0;
+        for(let value of d){
+            sum += value;
+        }
+        let av = 0;
+        for(let i = 0; i < 6; i++){
+            av += d[i] * (i + 1);
+        }
+        for(let i = 0; i < 6; i++){
+            let div = document.createElement("div");
+            div.style.display = "table-row";
+            div.style.fontWeight = "normal";
+            let dt = document.createElement("dt");
+            dt.innerText = "Note " + (i + 1) + ": ";
+            dt.style.width = "150px";
+            dt.style.textAlign = "center";
+            dt.style.fontWeight = "normal";
+            div.appendChild(dt);
+            let dd = document.createElement("dt");
+            let percentage = Number((d[i] / sum * 100).toFixed(1)) + "%";
+            dd.innerText = d[i] + "x (" + percentage + ")";
+            dd.style.display = "table-cell";
+            dd.style.width = "200px";
+            dd.style.textAlign = "right";
+            dd.style.border = "transparent";
+            dd.style.padding = "0.25em";
+            dd.style.fontWeight = "normal";
+            div.appendChild(dd);
+            dl.appendChild(div);
+        }
+        let div = document.createElement("div");
+        div.style.display = "table-row";
+        let dt = document.createElement("dt");
+        dt.innerText = "Durchschnitt: ";
+        dt.style.width = "150px";
+        dt.style.textAlign = "center";
+        div.appendChild(dt);
+        let dd = document.createElement("dt");
+        dd.innerText = Number((av / sum).toFixed(1));
+        dd.style.display = "table-cell";
+        dd.style.width = "200px";
+        dd.style.textAlign = "right";
+        dd.style.border = "transparent";
+        dd.style.padding = "0.25em";
+        div.appendChild(dd);
+        dl.appendChild(div);
+        let headline = document.createElement("p");
+        /**
+         * font-size: 20px;
+         * font-style: oblique;
+         */
+        headline.innerText = "Statistiken";
+        headline.style.fontSize = "20px";
+        headline.style.fontStyle = "oblique";
+        cell.appendChild(headline);
+        cell.appendChild(dl);
     }
 
     update_canvas(exam){
-        let parent = document.getElementById("canvas_container_" + exam["name"]);
-        let c = document.getElementById("canvas_element");
+        let parent = document.getElementById("canvas_container_cell_" + exam["name"]);
+        let c = document.getElementById("canvas_element_" + exam["name"]);
         if(c !== null){
             parent.removeChild(c);
         }
         let canvas = document.createElement("canvas");
-        canvas.id = "canvas_element";
+        canvas.id = "canvas_element_" + exam["name"];
         let canvasWidth = 400;
         let canvasHeight = 350;
         canvas.width = canvasWidth;
@@ -625,22 +737,25 @@ class Base{
         cv.stroke();
 
         let d = base.calc_canvas_values(exam);
-        var data = { "values":[
-                {A: "1", "B": d[0], C: "#1ed327"},
-                {A: "2", "B": d[1], C: "#00ff2a"},
-                {A: "3", "B": d[2], C: "#dcff42"},
-                {A: "4", "B": d[3], C: "#f3af25"},
-                {A: "5", "B": d[4], C: "#ff6100"},
-                {A: "6", "B": d[5], C: "#ff0000"},
+        let data = { "values":[
+                {A: "1", "B": d[0], C: base.grade_colors[1]},
+                {A: "2", "B": d[1], C: base.grade_colors[2]},
+                {A: "3", "B": d[2], C: base.grade_colors[3]},
+                {A: "4", "B": d[3], C: base.grade_colors[4]},
+                {A: "5", "B": d[4], C: base.grade_colors[5]},
+                {A: "6", "B": d[5], C: base.grade_colors[6]},
             ]};
         //Options Graph
-        var graphMax = base.students.length;
-        var graphPadding = 10;
-        var graphFaktor = (canvasHeight-(2*graphPadding)) / graphMax * 2;
-        var graphWidth = (canvasWidth-graphPadding) / data.values.length;
-        var graphTextcolor = '#000000';
+        let graphMax = Math.max.apply(null, d);
+        if(graphMax < 5)
+            graphMax = 4;
+        let graphPadding = 10;
+        let graphFaktor = (canvasHeight-(2*graphPadding)) / graphMax;
+        let graphWidth = (canvasWidth-graphPadding) / data.values.length;
+        let graphTextcolor = '#000000';
+        let max_value = Math.max.apply(null, d);
         //Draw Graph
-        for(var i = 0; i < data.values.length; i ++){
+        for(let i = 0; i < data.values.length; i ++){
             let tmpTop = (canvasHeight-(graphFaktor*data["values"][i]["B"])).toFixed()-graphPadding;
             let tmpHeight = ((data["values"][i]["B"]*graphFaktor)).toFixed();
             cv.fillStyle = data.values[i].C;
@@ -648,9 +763,6 @@ class Base{
             cv.fillStyle = graphTextcolor;
             cv.fillText(data.values[i].A, graphWidth+((i-1)*graphWidth)+graphPadding+2, canvasHeight-2, graphWidth);
         }
-
-
-
 
         parent.appendChild(canvas);
     }
@@ -713,9 +825,11 @@ class Base{
         if(student["grades"][exam["section"]] === undefined){
             student["grades"][exam["section"]] = {}
         }
+        target.style.background = base.grade_colors[grade];
         student["grades"][exam["section"]][exam["name"]] = [points, grade];
         base.save_information();
         base.update_canvas(exam);
+        base.update_grade_statistics(exam);
     }
 
     accordion_table(){

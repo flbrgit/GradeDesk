@@ -163,6 +163,7 @@ td.min {
     white-space: nowrap;
 }
 
+
 tr:nth-child(even) {
     background-color: rgba(150, 212, 212, 0.4);
 }
@@ -252,6 +253,15 @@ label.h2 {
 }
 
 .panel {
+    padding: 0 18px;
+    background-color: #a8ffe8;
+    max-height: 0;
+    width: 100%;
+    overflow: hidden;
+    transition: max-height 0.2s ease-out;
+}
+
+.canvas_panel {
     padding: 0 18px;
     background-color: #a8ffe8;
     max-height: 0;
