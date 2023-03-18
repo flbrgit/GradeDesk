@@ -39,6 +39,7 @@ function innerText(output, object){
     object.set_students(output[0]);
     object.set_sections(output[1]);
     object.set_exams(output[2]);
+    location.reload();
 }
 
 /**

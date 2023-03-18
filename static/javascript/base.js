@@ -199,7 +199,7 @@ class Base{
         for(let section of this.sections){
             for (let i = 0; i < section["columns"]; i++){
                 let cell = row.insertCell();
-                cell.innerHTML = "<img alt='error' src='/static/images/verboten.png' " +
+                cell.innerHTML = "<img alt='error' src='static/images/verboten.png' " +
                     "width='30' " +
                     "onclick='base.delete_section(\"" + section["name"] + "\")'/>";
             }
@@ -213,7 +213,7 @@ class Base{
             let row = table.insertRow();
             let cell = row.insertCell();
             let cell_list = [];
-            cell.innerHTML = "<img alt='error' src='/static/images/verboten.png' " +
+            cell.innerHTML = "<img alt='error' src='static/images/verboten.png' " +
                 "width='30' " +
                 "onclick='base.delete_student(\"" + student["name"] + "\")'/>";
             cell = row.insertCell();
@@ -554,13 +554,13 @@ class Base{
             let cell4 = row.insertCell();
             cell4.innerText = "Prüfung löschen";
             /**
-             * "<img alt='error' src='/static/images/verboten.png' " +
+             * "<img alt='error' src='static/images/verboten.png' " +
              *                     "width='30' " +
              *                     "onclick='base.delete_section(\"" + section["name"] + "\")'/>";
              */
             let img = document.createElement("img");
             img.alt = "delete";
-            img.src = "/static/images/verboten.png";
+            img.src = "static/images/verboten.png";
             img.width = "30";
             img.setAttribute("onclick", "base.delete_exam(this)");
             img.setAttribute("exam_name", exam["name"]);
