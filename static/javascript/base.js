@@ -440,12 +440,27 @@ class Base{
             let neu = base.create_section(section);
             base.sections.push(neu);
         }
+        console.log("3");
         let values = {};
         for(let i = 0; i < 6; i++){
             values[i] = Math.round(parseFloat(points * base.percentages[i]));
         }
+        let used = 0;
+        for(let exam of base.exams){
+            if(exam["section"] === section)
+                used += 1;
+        }
+        let sections = [];
+        for(let s of base.sections){
+            if(s["name"] === section && used >= s["columns"]){
+                s["columns"] += 1;
+                console.log("hello");
+            }
+            sections.push(s);
+        }
         let exam = {"name": name, "points": parseInt(points),
             "section": section, "keys": values}
+        base.sections = sections;
         base.exams.push(exam);
         base.save_information();
         base.update();
@@ -790,6 +805,14 @@ class Base{
         for(let student of base.students){
             if(student["name"] === name)
                 return student;
+        }
+        return null;
+    }
+
+    get_section(name){
+        for(let section of base.sections){
+            if(section["name"] === name)
+                return section;
         }
         return null;
     }
