@@ -12,15 +12,19 @@ class Base{
             5: "#ff6100",
             6: "#ff0000",
         }
+        this.saved_name = "";
         this.retrieve_information();
         document.onload = this.update;
     }
 
     export_data(){
         let data = JSON.stringify([JSON.stringify(this.students), JSON.stringify(this.sections), JSON.stringify(this.exams)]);
-        let name = prompt("Bitte Dateinamen eingeben:");
-        if (name != null)
+        let name = prompt("Bitte Dateinamen eingeben:", this.saved_name);
+        if (name != null) {
             download(data, name + ".gradedesk", "plaintext");
+            this.saved_name = name;
+            this.save_information();
+        }
     }
 
     import_data(data){
@@ -95,6 +99,7 @@ class Base{
         localStorage.setItem("students", JSON.stringify(this.students));
         localStorage.setItem("sections", JSON.stringify(this.sections));
         localStorage.setItem("exams", JSON.stringify(this.exams));
+        localStorage.setItem("saved_name", this.saved_name);
     }
 
     retrieve_information(){
@@ -107,6 +112,7 @@ class Base{
         this.exams = JSON.parse(localStorage.getItem("exams"));
         if(this.exams == null)
             this.exams = [];
+        this.saved_name = localStorage.getItem("saved_name");
     }
 
     update(){
@@ -234,14 +240,14 @@ class Base{
                 cell = row.insertCell();
                 cell.innerText = this.calculate_average(section_list);
                 cell.setAttribute("name", "section_grade");
-                cell.style.background = this.grade_colors[Math.round(this.calculate_average(section_list))];
+                cell.style.background = this.grade_colors[parseInt(this.calculate_average(section_list))];
                 cell_list.push(this.calculate_average(section_list));
             }
             cell = row.insertCell();
             cell.style.minWidth = "20px";
             cell.innerText = this.calculate_average(cell_list);     //"⌀ " +
             let color = "#44c8f8";
-            cell.style.background = "linear-gradient(to right, #44c8f8 1%, " + this.grade_colors[Math.round(this.calculate_average(cell_list))] + " 100%)";       // ;
+            cell.style.background = "linear-gradient(to right, #44c8f8 1%, " + this.grade_colors[parseInt(this.calculate_average(cell_list))] + " 100%)";       // ;
             if(this.calculate_average(cell_list) - Math.round(this.calculate_average(cell_list)) === -0.5) {
                 cell.style.fontWeight = "bold";
                 cell.style.fontStyle = "italic";
@@ -392,8 +398,8 @@ class Base{
         for(let i = 0; i < 6; i++){
             let cell = row.insertCell();
             cell.style.textAlign = "right";
-            cell.innerText = Math.round(parseFloat(points * base.percentages[i]));
-            values[i] = Math.round(parseFloat(points * base.percentages[i]));
+            cell.innerText = parseInt(parseFloat(points * base.percentages[i]));
+            values[i] = parseInt(parseFloat(points * base.percentages[i]));
         }
         main.appendChild(table);
         base.check_valid_exam_input();
@@ -448,10 +454,9 @@ class Base{
             let neu = base.create_section(section);
             base.sections.push(neu);
         }
-        console.log("3");
         let values = {};
         for(let i = 0; i < 6; i++){
-            values[i] = Math.round(parseFloat(points * base.percentages[i]));
+            values[i] = parseInt(parseFloat(points * base.percentages[i]));
         }
         let used = 0;
         for(let exam of base.exams){
