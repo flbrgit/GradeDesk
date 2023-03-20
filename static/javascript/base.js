@@ -512,6 +512,7 @@ class Base{
             let exam_element = document.createElement("div");
             exam_element.className = "accordion";
             exam_element.style.textAlign = "center";
+            exam_element.id = "exam_element_" + exam["name"];
             let headline = document.createElement("p");
             headline.style.fontSize = "20px";
             headline.style.fontStyle = "oblique";
@@ -522,7 +523,9 @@ class Base{
             inner_table.style.alignContent = "center";
             inner_table.style.textAlign = "center";
             inner_table.style.background = "transparent";
+            inner_table.id = "table5_" + exam["name"];
             let row = inner_table.insertRow();
+            row.id = "row_" + exam["name"];
             let cell1 = row.insertCell();
             cell1.innerText = "Lernbereich: " + exam["section"];
             let cell2 = row.insertCell();
@@ -540,7 +543,6 @@ class Base{
             table.style.minWidth = "250px";
             table.style.textOverflow = "ellipsis";
             table.style.alignSelf = "center";
-            table.id = "table5";
             let row1 = table.insertRow();
             for(let i = 0; i < 6; i++){
                 let cell = row1.insertCell();
@@ -571,10 +573,60 @@ class Base{
             img.setAttribute("exam_name", exam["name"]);
             cell4.appendChild(document.createElement("br"));
             cell4.appendChild(img);
+            let cell5 = row.insertCell();
+            cell5.innerHTML = "<p>Prüfung drucken</p>";
+            let print = document.createElement("button");
+            print.innerText = "Prüfung drucken";
+            print.setAttribute("onclick", "base.print(this);");
+            print.setAttribute("exam", exam["name"]);
+            print.id = "print_" + exam["name"];
+            cell5.appendChild(print);
             exam_element.appendChild(inner_table);
             main.appendChild(exam_element);
             base.create_student_table(exam, main);
         }
+    }
+
+    print(calling){
+        let exam = base.get_exam(calling.getAttribute("exam"));
+        let prtContent = document.getElementById("panel_" + exam["name"]);
+        let WinPrint = window.open('', '', 'left=0,top=0,width=800,height=900,toolbar=0,scrollbars=0,status=0');
+        // exam["name"] + "_" + student["name"]
+        for(let student of base.students){
+            let temp = document.getElementById(exam["name"] + "_" + student["name"]);
+            let label = document.getElementById("label_" + exam["name"] + "_" + student["name"]);
+            let neu = document.createElement("p");
+            neu.innerText = "Punkte: " + temp.value;
+            temp.parentNode.replaceChild(neu, temp);
+            neu.parentNode.removeChild(label);
+        }
+        let before = document.getElementById("exam_element_" + exam["name"]);
+        let table = document.getElementById("row_" + exam["name"]);
+        table.deleteCell(4);
+        table.deleteCell(3);
+        table.parentNode.replaceChild(table, table);
+        WinPrint.document.write(before.innerHTML + prtContent.innerHTML);
+        WinPrint.document.close();
+        WinPrint.focus();
+        WinPrint.print();
+        WinPrint.close();
+        location.reload();
+        /*
+        var myAnchor = document.getElementById("myAnchor");
+        var mySpan = document.createElement("span");
+        mySpan.innerHTML = "replaced anchor!";
+        myAnchor.parentNode.replaceChild(mySpan, myAnchor);
+
+
+        var divContents = document.getElementById("exam_panel").innerHTML;
+        var a = window.open('', '', 'height=0, width=0');
+        a.document.write('<html>');
+        a.document.write('<body >');
+        a.document.write(divContents);
+        a.document.write('</body></html>');
+        a.document.close();
+        a.print();
+         */
     }
 
     delete_exam(calling){
@@ -609,6 +661,7 @@ class Base{
     create_student_table(exam, main){
         let panel = document.createElement("div");
         panel.className = "panel";
+        panel.id = "panel_" + exam["name"];
         let student_table = document.createElement("table");
         student_table.style.width = "100%";
         student_table.style.alignContent = "center";
@@ -625,11 +678,12 @@ class Base{
             label.htmlFor = student["name"];
             label.style.marginTop = "10px";
             label.innerText = "Punkte:";
+            label.id = "label_" + exam["name"] + "_" + student["name"];
             cell.appendChild(label);
             // <input id="form4" style="margin-top: 10px;width: 75px; text-align: center"
             // type="number" value="32" onkeyup="do_something">
             let input = document.createElement("input");
-            input.id = student["name"];
+            input.id = exam["name"] + "_" + student["name"];
             input.style.marginTop = "10px";
             input.style.width = "75px";
             input.style.textAlign = "center";
@@ -744,6 +798,7 @@ class Base{
         }
         let canvas = document.createElement("canvas");
         canvas.id = "canvas_element_" + exam["name"];
+        canvas.className = "canvas";
         let canvasWidth = 400;
         let canvasHeight = 350;
         canvas.width = canvasWidth;
