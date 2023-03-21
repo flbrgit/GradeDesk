@@ -553,8 +553,8 @@ class Base{
             for(let i = 0; i < 6; i++){
                 let cell = row1.insertCell();
                 cell.style.textAlign = "right";
-                cell.innerText = Math.round(parseFloat(exam["points"] * base.percentages[i]));
-                values[i] = Math.round(parseFloat(exam["points"] * base.percentages[i]));
+                cell.innerText = parseInt(parseFloat(exam["points"] * base.percentages[i]));
+                values[i] = parseInt(parseFloat(exam["points"] * base.percentages[i]));
             }
             cell3.innerText = "Notenschlüssel: ";
             cell3.appendChild(table);
