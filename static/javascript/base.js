@@ -848,6 +848,10 @@ class Base{
         const img = canvas.toDataURL('image/png');
         let image = document.createElement("img");
         image.src = img;
+        image.id = canvas.id;
+        let e = document.getElementById(canvas.id);
+        if (e !== null)
+            parent.removeChild(e);
 
         parent.appendChild(image);
     }
