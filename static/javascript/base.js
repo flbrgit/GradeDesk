@@ -835,7 +835,6 @@ class Base{
         let graphFaktor = (canvasHeight-(2*graphPadding)) / graphMax;
         let graphWidth = (canvasWidth-graphPadding) / data.values.length;
         let graphTextcolor = '#000000';
-        let max_value = Math.max.apply(null, d);
         //Draw Graph
         for(let i = 0; i < data.values.length; i ++){
             let tmpTop = (canvasHeight-(graphFaktor*data["values"][i]["B"])).toFixed()-graphPadding;
@@ -846,7 +845,11 @@ class Base{
             cv.fillText(data.values[i].A, graphWidth+((i-1)*graphWidth)+graphPadding+2, canvasHeight-2, graphWidth);
         }
 
-        parent.appendChild(canvas);
+        const img = canvas.toDataURL('image/png');
+        let image = document.createElement("img");
+        image.src = img;
+
+        parent.appendChild(image);
     }
 
     calc_canvas_values(exam){
